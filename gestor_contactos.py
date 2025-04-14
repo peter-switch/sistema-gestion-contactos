@@ -1,15 +1,18 @@
+import re # biblioteca para trabajar con regex (expresiones regulares)
 
 #Clase para generar contactos
 class Contacto:
+    
     def __init__(self, nombre, telefono, correo):
         self.nombre = nombre
         self.telefono = telefono
         self.correo = correo
+        
 
     def __str__(self):
-        return f"Contacto: {self.nombre} | {self.telefono} | {self.correo}\n"
+        return f"Nombre: {self.nombre} Tel: {self.telefono} Email:{self.correo}\n"
     
-    #
+    #Usaremos este método para escribir en al txt
     def inserccion_contactos(self):
         return f"{self.nombre},{self.telefono},{self.correo}\n"
     
@@ -20,13 +23,15 @@ class GestionContactos:
         
         self.nombre_archivo="agenda.txt"
 
-    def agregar_contactos(self,contacto):
+    def agregar_contactos(self,contacto):#recibe el objeto contacto desde MenuApp, que es el lugar donde se crea
         with open(self.nombre_archivo,"a") as archivo:
             archivo.write(contacto.inserccion_contactos())
             print("\nContacto añadido correctamente\n")
     
     def mostrar_contactos(self):
-        pass
+        with open(self.nombre_archivo, "r") as archivo:
+            print("\n***Contactos disponibles\n***")
+            print(archivo.read())
 
     def buscar_contactos(self):
         pass
@@ -39,7 +44,9 @@ class MenuApp:
 
     def __init__(self):
         self.gestion_contactos=GestionContactos() #creamos el objeto gestion_contactos para poder usar los métodos de clase de GestionContactos
-
+        self.email_patron= r"^[\w\.-]+@[\w\.-]+\.\w+$" #expresión regular para validar correos electrónicos
+        self.telefono_patron= r"\d{9}" #expresión regular para validar teléfonos
+        self.nombre_patron= r"^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$" #expresión regular para validar nómbres
     def menu(self):
         try:
             print("***Agenda de contactos***")
@@ -47,27 +54,38 @@ class MenuApp:
             while True:
 
                 print("""
-                01. Añadir contacto.
-                02. Mostrar contactos.
-                03. Buscar contacto.
-                04. Eliminar contacto.
-                05. Salir.
-
-                \n""")
+1. Añadir contacto.
+2. Mostrar contactos.
+4. Eliminar contacto.
+5. Salir.\n""")
                 
                 opcion=int(input("Selecciona opción (1-5): "))
                 
                 if opcion==1:
                     nombre=input("Nombre: ")
-                    telefono=input("Telefono: ")
+                    while re.fullmatch(self.nombre_patron,nombre)==None: #fullmuch devuelve None si no hay coincidencia completa con el patron 
+                         print("\nFormato de nombre incorrecto.")
+                         correo=input("Nombre: ")
+
+
+                    telefono=input("Teléfono: ")
+                    while re.fullmatch(self.telefono_patron,telefono)==None: #fullmatch devuelve None si no hay coincidencia con el patron 
+                         print("\nFormato de telefono incorrecto.")
+                         telefono=input("Teléfono: ")
+
                     correo=input("E-mail: ")
-                    contacto=Contacto(nombre,telefono,correo)
+                    while re.fullmatch(self.email_patron,correo)==None: #fullmatch devuelve None si no hay coincidencia con el patron 
+                         print("\nFormato de e-mail incorrecto.")
+                         telefono=input("E-mail: ")
+                        
+                    contacto=Contacto(nombre.lower().strip(),telefono.strip(),correo.lower().strip()) 
+                    #creamos el objero contacto y aprovechamos para guardar los datos en mínuscula y limpios de espacios
             
-                    self.gestion_contactos.agregar_contactos(contacto)
+                    self.gestion_contactos.agregar_contactos(contacto)#pasamos objeto contacto a gestion_contactos
 
 
                 elif opcion==2:
-                    pass
+                    self.gestion_contactos.mostrar_contactos()
 
 
                 elif opcion==3:
@@ -91,6 +109,6 @@ class MenuApp:
             print(f"Ha ocurrido un error: {error}")
 
 
-print("error")
+#Creamos la instancia de MenuApp para iniciar el programa
 agenda_contactos=MenuApp()
 agenda_contactos.menu()
