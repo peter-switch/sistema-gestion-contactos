@@ -10,17 +10,20 @@ class Contacto:
         return f"Contacto: {self.nombre} | {self.telefono} | {self.correo}\n"
     
     #
-    def insercion_contacto(self):
+    def inserccion_contactos(self):
         return f"{self.nombre},{self.telefono},{self.correo}\n"
     
 #Clase para generar los métodos de gestión
 class GestionContactos:
 
     def __init__(self):
-        self.lista_contactos=lista_contactos_vacia=[]
+        
+        self.nombre_archivo="agenda.txt"
 
-    def agregar_contactos(self):
-        pass
+    def agregar_contactos(self,contacto):
+        with open(self.nombre_archivo,"a") as archivo:
+            archivo.write(self.inserccion_contactos())
+            print("\nContacto añadido correctamente\n")
     
     def mostrar_contactos(self):
         pass
@@ -34,5 +37,60 @@ class GestionContactos:
 #Clase para generar el menú interactivo
 class MenuApp:
 
-    pass
-  
+    def __init__(self):
+        self.gestion_contactos=GestionContactos() #creamos el objeto gestion_contactos para poder usar los métodos de clase de GestionContactos
+
+    def menu(self):
+        try:
+            print("***Agenda de contactos***")
+            
+            while True:
+
+                print("""
+                01. Añadir contacto.
+                02. Mostrar contactos.
+                03. Buscar contacto.
+                04. Eliminar contacto.
+                05. Salir.
+
+                \n""")
+                
+                opcion=int(input("Selecciona opción (1-5): "))
+                
+                if opcion==1:
+                    nombre=input("Nombre: ")
+                    telefono=input("Telefono: ")
+                    correo=input("E-mail: ")
+                    contacto=Contacto(nombre,telefono,correo)
+            
+                    self.gestion_contactos.agregar_contacto(contacto)
+
+
+                elif opcion==2:
+                    pass
+
+
+                elif opcion==3:
+                    pass
+
+
+                elif opcion==4:
+                    pass
+
+
+                elif opcion==5:
+                    print("Saliendo del sistema...")
+                    break
+                else:
+                    print("Opción incorrecta. Selecciona una entre 1 y 5.")
+
+        except ValueError:
+            print("Valor introducido incorrecto. Selecciona una opción entre 1 y 5.")            
+
+        except Exception as error:
+            print(f"Ha ocurrido un error: {error}")
+
+
+print("error")
+agenda_contactos=MenuApp()
+agenda_contactos.menu()
