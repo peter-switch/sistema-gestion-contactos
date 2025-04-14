@@ -30,7 +30,7 @@ class GestionContactos:
     
     def mostrar_contactos(self):
         with open(self.nombre_archivo, "r", encoding="utf8") as archivo:
-            print("\n***Contactos disponibles\n***")
+            print("\n***Contactos disponibles***\n")
             print(archivo.read())
 
     def buscar_contactos(self):
