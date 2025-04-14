@@ -24,12 +24,12 @@ class GestionContactos:
         self.nombre_archivo="agenda.txt"
 
     def agregar_contactos(self,contacto):#recibe el objeto contacto desde MenuApp, que es el lugar donde se crea
-        with open(self.nombre_archivo,"a") as archivo:
+        with open(self.nombre_archivo,"a",encoding="utf8") as archivo:
             archivo.write(contacto.inserccion_contactos())
             print("\nContacto añadido correctamente\n")
     
     def mostrar_contactos(self):
-        with open(self.nombre_archivo, "r") as archivo:
+        with open(self.nombre_archivo, "r", encoding="utf8") as archivo:
             print("\n***Contactos disponibles\n***")
             print(archivo.read())
 
