@@ -31,7 +31,9 @@ class GestionContactos:
     def mostrar_contactos(self):
         with open(self.nombre_archivo, "r", encoding="utf8") as archivo:
             print("\n***Contactos disponibles***\n")
-            print(archivo.read())
+            print(archivo.read()) """muestra el contenido del archivo directo. 
+            Me gustaría dale formato en la proxima sesión
+            Seguramente pasando las líneas de texto a una lista se pueda. Y servirá para los próximos métodos"""
 
     def buscar_contactos(self):
         pass
