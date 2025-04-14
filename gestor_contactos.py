@@ -22,7 +22,7 @@ class GestionContactos:
 
     def agregar_contactos(self,contacto):
         with open(self.nombre_archivo,"a") as archivo:
-            archivo.write(self.inserccion_contactos())
+            archivo.write(contacto.inserccion_contactos())
             print("\nContacto añadido correctamente\n")
     
     def mostrar_contactos(self):
@@ -63,7 +63,7 @@ class MenuApp:
                     correo=input("E-mail: ")
                     contacto=Contacto(nombre,telefono,correo)
             
-                    self.gestion_contactos.agregar_contacto(contacto)
+                    self.gestion_contactos.agregar_contactos(contacto)
 
 
                 elif opcion==2:
