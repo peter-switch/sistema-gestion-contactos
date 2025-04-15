@@ -1,4 +1,5 @@
 import re # biblioteca para trabajar con regex (expresiones regulares)
+import os #biblioteca necesaria para poder validar la ruta del txt
 
 #Clase para generar contactos
 class Contacto:
@@ -30,6 +31,12 @@ class GestionContactos:
     
     def mostrar_contactos(self):
 
+        # Verificar si el archivo existe
+        if not os.path.exists(self.nombre_archivo):
+            print(f"\n¡Atención! El archivo '{self.nombre_archivo}' no existe.")
+            print("Por favor, agregue contactos primero antes de buscar.")
+            return  # Salimos de la función
+
         #creamos una lista vacia para almacenar los diccionarios de 3 elementos.
         lista_agenda_diccionarios=[]
         with open(self.nombre_archivo, "r", encoding="utf8") as archivo: #abrimos el archivo en modo lectura con "r"
@@ -50,7 +57,7 @@ class GestionContactos:
             
             #Recorremos la lista de diccionarios e imprimimos cada valor
             for diccionario in lista_agenda_diccionarios:
-                print(f"> Nombre: {diccionario['nombre']}")
+                print(f"> Nombre: {diccionario['nombre'].title()}") #title capitaliza nombre y apellido si lo tuviera
                 print(f"> Telefono: {diccionario['telefono']}")
                 print(f"> E-mail: {diccionario['correo']}\n")
 
@@ -59,8 +66,59 @@ class GestionContactos:
 
 
     def buscar_contactos(self):
-        pass
-    
+        # Verificar si el archivo existe
+        if not os.path.exists(self.nombre_archivo):
+            print(f"\n¡Atención! El archivo '{self.nombre_archivo}' no existe.")
+            print("Por favor, agregue contactos primero antes de buscar.")
+            return  # Salimos de la función
+
+        #creamos una lista vacia para almacenar los diccionarios de 3 elementos.
+        lista_agenda_diccionarios=[]
+
+        with open(self.nombre_archivo, "r", encoding="utf8") as archivo: #abrimos el archivo en modo lectura con "r"
+            
+            archivo_contactos=archivo.readlines() #Readlines genera una lista almacenando cada linea en un espacio de la lista.
+
+            for linea in archivo_contactos: #recorremos cada espacio de la lista que será una cadena de ste tipo"nombre,telegono,correo"
+                nombre, telefono, correo=linea.strip().split(",") #limpiamos con strip y cortamos usando la coma.
+                #Desmpaquetamos cada corte en una variable para conformar el diccionario
+                #Creamos el diccionario con los 3 datos.
+                contacto_diccionario={
+                    "nombre":nombre,
+                    "telefono":telefono,
+                    "correo":correo
+                }
+
+                lista_agenda_diccionarios.append(contacto_diccionario) #Añadimos cada diccionario a la lista
+
+            print("*** Buscar contacto en la agenda ***")
+
+            nombre_a_buscar=input("Introduce el nombre a buscar: ")
+
+
+        resultados_busqueda=[diccionario for diccionario in lista_agenda_diccionarios if diccionario["nombre"].lower()==nombre_a_buscar.strip().lower()]
+            
+        if resultados:
+            
+            for nombre in resultados:
+                print("\n¡Contacto encontrado!\n")
+                print(f"> Nombre: {diccionario['nombre'].title()}") #title capitaliza nombre y apellido
+                print(f"> Telefono: {diccionario['telefono']}")
+                print(f"> E-mail: {diccionario['correo']}\n")
+
+        else:
+                print("No hay resultados")
+            # for diccionario in lista_agenda_diccionarios:
+            #     if nombre_a_buscar.strip().lower()==diccionario["nombre"]:
+            #         print("\n¡Contacto encontrado!\n")
+            #         print(f"> Nombre: {diccionario['nombre'].title()}") #title capitaliza nombre y apellido
+            #         print(f"> Telefono: {diccionario['telefono']}")
+            #         print(f"> E-mail: {diccionario['correo']}\n")
+            #     else:
+            #         pass
+            
+
+
     def eliminar_contactos(self):
         pass
 
@@ -81,6 +139,7 @@ class MenuApp:
                 print("""
 1. Añadir contacto.
 2. Mostrar contactos.
+3. Buscar contacto por nombre.
 4. Eliminar contacto.
 5. Salir.\n""")
                 
@@ -114,7 +173,7 @@ class MenuApp:
 
 
                 elif opcion==3:
-                    pass
+                    self.gestion_contactos.buscar_contactos()
 
 
                 elif opcion==4:
