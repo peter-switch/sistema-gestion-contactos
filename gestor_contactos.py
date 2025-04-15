@@ -29,11 +29,34 @@ class GestionContactos:
             print("\nContacto añadido correctamente\n")
     
     def mostrar_contactos(self):
-        with open(self.nombre_archivo, "r", encoding="utf8") as archivo:
-            print("\n***Contactos disponibles***\n")
-            print(archivo.read()) """muestra el contenido del archivo directo. 
-            Me gustaría dale formato en la proxima sesión
-            Seguramente pasando las líneas de texto a una lista se pueda. Y servirá para los próximos métodos"""
+
+        #creamos una lista vacia para almacenar los diccionarios de 3 elementos.
+        lista_agenda_diccionarios=[]
+        with open(self.nombre_archivo, "r", encoding="utf8") as archivo: #abrimos el archivo en modo lectura con "r"
+            print("\n*** Contactos disponibles ***\n")
+            archivo_contactos=archivo.readlines() #Readlines genera una lista almacenando cada linea en un espacio de la lista.
+
+            for linea in archivo_contactos: #recorremos cada espacio de la lista que será una cadena de ste tipo"nombre,telegono,correo"
+                nombre, telefono, correo=linea.strip().split(",") #limpiamos con strip y cortamos usando la coma.
+                #Desmpaquetamos cada corte en una variable para conformar el diccionario
+                #Creamos el diccionario con los 3 datos.
+                contacto_diccionario={
+                    "nombre":nombre,
+                    "telefono":telefono,
+                    "correo":correo
+                }
+
+                lista_agenda_diccionarios.append(contacto_diccionario) #Añadimos cada diccionario a la lista
+            
+            #Recorremos la lista de diccionarios e imprimimos cada valor
+            for diccionario in lista_agenda_diccionarios:
+                print(f"> Nombre: {diccionario['nombre']}")
+                print(f"> Telefono: {diccionario['telefono']}")
+                print(f"> E-mail: {diccionario['correo']}\n")
+
+          
+            
+
 
     def buscar_contactos(self):
         pass
