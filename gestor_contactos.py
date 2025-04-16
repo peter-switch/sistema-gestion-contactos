@@ -8,6 +8,7 @@ class Contacto:
         self.nombre = nombre
         self.telefono = telefono
         self.correo = correo
+        self.nombre_archivo="agenda.txt"
         
 
     def __str__(self):
@@ -15,7 +16,33 @@ class Contacto:
     
     #Usaremos este método para escribir en al txt
     def inserccion_contactos(self):
-        return f"{self.nombre},{self.telefono},{self.correo}\n"
+
+        try:
+
+            with open(self.nombre_archivo,"r",encoding="utf8") as archivo:
+
+                lineas=archivo.readlines()
+                if lineas: #Si el archivo está creado y hay lineas escritas en el archivo
+
+                    id_ultimo_encontrado=int(lineas[-1].split(",")[0])
+                    #[-1] representa el último valor de la lista
+                    #[0]Indica que solo imprima el indice 0 de la lista, en este caso es el ID
+                    id=id_ultimo_encontrado+1
+                    #sumamos 1 al id encontrado y ya tenemos el id para el próximo contacto
+
+                else: #Si no hay lineas en el archivo, entoces es que está vacío y no hay ningún id
+
+                    id=1 #El primer id será 1
+                
+                
+
+        except FileNotFoundError:
+                #Si el archivo no existe el primer id que se cree en un futuro sera 1
+                id=1
+                print(f"Archivo {self.nombre_archivo} no encontrado. Añade algún contacto para crearlo.")
+
+        return f"{id},{self.nombre},{self.telefono},{self.correo}\n"
+
     
 #Clase para generar los métodos de gestión
 class GestionContactos:
@@ -44,10 +71,11 @@ class GestionContactos:
             archivo_contactos=archivo.readlines() #Readlines genera una lista almacenando cada linea en un espacio de la lista.
 
             for linea in archivo_contactos: #recorremos cada espacio de la lista que será una cadena de ste tipo"nombre,telegono,correo"
-                nombre, telefono, correo=linea.strip().split(",") #limpiamos con strip y cortamos usando la coma.
+                id,nombre, telefono, correo=linea.strip().split(",") #limpiamos con strip y cortamos usando la coma.
                 #Desmpaquetamos cada corte en una variable para conformar el diccionario
                 #Creamos el diccionario con los 3 datos.
                 contacto_diccionario={
+                    "id":id,
                     "nombre":nombre,
                     "telefono":telefono,
                     "correo":correo
@@ -57,6 +85,7 @@ class GestionContactos:
             
             #Recorremos la lista de diccionarios e imprimimos cada valor
             for diccionario in lista_agenda_diccionarios:
+                print(f"> Id: {diccionario['id']}")
                 print(f"> Nombre: {diccionario['nombre'].title()}") #title capitaliza nombre y apellido si lo tuviera
                 print(f"> Telefono: {diccionario['telefono']}")
                 print(f"> E-mail: {diccionario['correo']}\n")
@@ -80,10 +109,11 @@ class GestionContactos:
             archivo_contactos=archivo.readlines() #Readlines genera una lista almacenando cada linea en un espacio de la lista.
 
             for linea in archivo_contactos: #recorremos cada espacio de la lista que será una cadena de ste tipo"nombre,telegono,correo"
-                nombre, telefono, correo=linea.strip().split(",") #limpiamos con strip y cortamos usando la coma.
+                id,nombre, telefono, correo=linea.strip().split(",") #limpiamos con strip y cortamos usando la coma.
                 #Desmpaquetamos cada corte en una variable para conformar el diccionario
                 #Creamos el diccionario con los 3 datos.
                 contacto_diccionario={
+                    "id":id,
                     "nombre":nombre,
                     "telefono":telefono,
                     "correo":correo
@@ -96,17 +126,18 @@ class GestionContactos:
             nombre_a_buscar=input("Introduce el nombre a buscar: ")
 
 
-        resultados_busqueda=[diccionario for diccionario in lista_agenda_diccionarios if diccionario["nombre"].lower()==nombre_a_buscar.strip().lower()]
+        resultados=[diccionario for diccionario in lista_agenda_diccionarios if diccionario["nombre"].lower()==nombre_a_buscar.strip().lower()]
             
-        if resultados:
+        if resultados: #Si la lista resultados existe entoces hace lo siguiente:
             
-            for nombre in resultados:
+            for nombre in resultados: #recorre la lista por si hay varios nombres de contactos iguales e imprime en pantalla
                 print("\n¡Contacto encontrado!\n")
-                print(f"> Nombre: {diccionario['nombre'].title()}") #title capitaliza nombre y apellido
-                print(f"> Telefono: {diccionario['telefono']}")
-                print(f"> E-mail: {diccionario['correo']}\n")
+                print(f"> Id: {nombre['id']}")
+                print(f"> Nombre: {nombre['nombre'].title()}") #title capitaliza nombre y apellido
+                print(f"> Telefono: {nombre['telefono']}")
+                print(f"> E-mail: {nombre['correo']}\n")
 
-        else:
+        else: 
                 print("No hay resultados")
             # for diccionario in lista_agenda_diccionarios:
             #     if nombre_a_buscar.strip().lower()==diccionario["nombre"]:
