@@ -151,7 +151,40 @@ class GestionContactos:
 
 
     def eliminar_contactos(self):
-        pass
+        self.mostrar_contactos()
+        lista_contactos_actual=[]
+        try:
+
+            with open(self.nombre_archivo, "r", enconding="utf8"): #leemos el archivo
+                contenido_archivo=archivo.readlines()
+                for linea in contenido_archivo:
+                    id,nombre,telefono,correo=linea.strip().split(",")
+
+                    diccionario={
+                        "id":id,
+                        "nombre":nombre,
+                        "telefono":telefono,
+                        "email":correo
+                    }
+                    lista_contactos_actual.append(diccionario)
+
+            id_a_eliminar=int(input("Escribe el id del contacto que deseas eliminar: "))
+
+           #VAMOS POR AQUI. FALTA RECORRER LA LISTA COMPARANDO CON ELEMENO A ELIMINAR
+           #Y GENERAR UNA NUEVA LISTA SIN ESE ELEMENO Y SOBREESCRIBIR EL TXT
+
+
+
+        except FileNotFoundError as error01:
+            print(f"Archivo no encontrado {error01}")
+
+        except ValueError as error02:
+            print(f"Valor introducido incorrecto. Debe ser un número positivo: {error02}")
+
+
+
+
+
 
 #Clase para generar el menú interactivo
 class MenuApp:
