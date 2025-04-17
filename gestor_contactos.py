@@ -152,10 +152,11 @@ class GestionContactos:
 
     def eliminar_contactos(self):
         self.mostrar_contactos()
-        lista_contactos_actual=[]
+        lista_contactos_actual=[]#lista con todos los contactos guardados en el txt
+        lista_contactos_nueva=[] #se guardarán los contactos excepto el conctacto seleccionado para ser eliminado
         try:
 
-            with open(self.nombre_archivo, "r", enconding="utf8"): #leemos el archivo
+            with open(self.nombre_archivo, "r", encoding="utf8") as archivo: #leemos el archivo
                 contenido_archivo=archivo.readlines()
                 for linea in contenido_archivo:
                     id,nombre,telefono,correo=linea.strip().split(",")
@@ -168,10 +169,45 @@ class GestionContactos:
                     }
                     lista_contactos_actual.append(diccionario)
 
-            id_a_eliminar=int(input("Escribe el id del contacto que deseas eliminar: "))
+            id_a_eliminar=int(input("> Escribe el id del contacto que deseas eliminar: "))
 
-           #VAMOS POR AQUI. FALTA RECORRER LA LISTA COMPARANDO CON ELEMENO A ELIMINAR
-           #Y GENERAR UNA NUEVA LISTA SIN ESE ELEMENO Y SOBREESCRIBIR EL TXT
+            print(f"\nVas a eliminar el contacto con id: {id_a_eliminar}.\n")
+                  
+            for contacto in lista_contactos_actual:
+
+                if int(contacto["id"])==id_a_eliminar: #Si existe el id a eliminar hacemos lo siguiente
+            
+            
+                    respuesta=(input("> ¿Estás seguro? s/n: ")).lower()
+
+
+
+
+                    if respuesta=="s":
+                        
+                        lista_contactos_nueva=[contacto_recorrido for contacto_recorrido in lista_contactos_actual if int(contacto_recorrido["id"]) != id_a_eliminar]
+                        
+                        with open(self.nombre_archivo,"w",encoding="utf8") as archivo:
+
+                            for contacto in lista_contactos_nueva:
+
+                                archivo.write(f"{contacto["id"]},{contacto["nombre"]},{contacto["telefono"]},{contacto["email"]}")
+
+
+                        print("\n¡Contacto eliminado completamente!")
+
+                    
+                    elif respuesta=="n":
+
+                        print("El contacto se ha dejado como estaba")
+
+                    else:
+
+                        print("Valor instroducido incorrecto. Introduce (s) para Sí, (n) para No.")
+
+                else:
+
+                    print("El id introducido no es correcto.")
 
 
 
@@ -241,11 +277,11 @@ class MenuApp:
 
 
                 elif opcion==4:
-                    pass
+                    self.gestion_contactos.eliminar_contactos()
 
 
                 elif opcion==5:
-                    print("Saliendo del sistema...")
+                    print("\nSaliendo del sistema...")
                     break
                 else:
                     print("Opción incorrecta. Selecciona una entre 1 y 5.")
