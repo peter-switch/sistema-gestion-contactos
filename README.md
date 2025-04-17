@@ -1,3 +1,5 @@
+![Sistema de Gestión de Contactos en Python](https://repository-images.githubusercontent.com/965984078/11454188-b3b7-4c1d-b67e-6db05d4afbc0)
+
 # Sistema de Gestión de Contactos
 
 ## Descripción
