@@ -74,5 +74,3 @@ Los estudiantes deben entregar:
 
 ---
 
-¡Buena suerte programando!
-
